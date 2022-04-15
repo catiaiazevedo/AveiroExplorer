@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:aveiroexplorer/screens/homescreen.dart';
 
 Future<void> main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(apiKey: "AAAAnx-fTQ8:APA91bFOaPWbDjCxrLQ09k6AejirotbbotFJ-xosiJFN8atxjniYQkwLLHbo6b-eESdR5IxyCf7Zi8uWklpIRkdi279Ag-yTuphZHqc38pscWKSOHuuYxdi43q-7RqgwNJ8xZ3g9rKSj",
+  try{
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(apiKey: "AAAAnx-fTQ8:APA91bFOaPWbDjCxrLQ09k6AejirotbbotFJ-xosiJFN8atxjniYQkwLLHbo6b-eESdR5IxyCf7Zi8uWklpIRkdi279Ag-yTuphZHqc38pscWKSOHuuYxdi43q-7RqgwNJ8xZ3g9rKSj",
                              appId: "1:683430333711:android:b8e504b9ddaa2dfd99427a", 
                              messagingSenderId: "683430333711", 
                              projectId: "aveiroexplorericm")
-  );
+    );
+  } catch (e) {};
+  
   runApp(const MyApp());
 }
 
