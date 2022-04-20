@@ -1,3 +1,4 @@
+import 'package:aveiroexplorer/screens/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -55,7 +56,11 @@ class DetailPage extends StatelessWidget
                   ),
                   GestureDetector(
                     onTap: () {
-                      //Navigator.of(context).pop();
+                      //Navigator.of(context).pop(); 40.639453663981236, -8.650906087045751
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MapPage(destinationLatitude: 40.639453663981236, destinationLongitude: -8.650906087045751)),
+                          );
                     },
                     child: Container(
                       height: 57.6,
@@ -79,7 +84,7 @@ class DetailPage extends StatelessWidget
             children: <Widget>[
 
               Padding(
-                    padding: const EdgeInsets.only(top: 19.2),
+                    padding: const EdgeInsets.only(top: 100),
                     child: Text(
                       name,
                       maxLines: 2,
@@ -92,7 +97,7 @@ class DetailPage extends StatelessWidget
                   ),
 
               Padding(
-                    padding: const EdgeInsets.only(top: 19.2),
+                    padding: const EdgeInsets.only(top: 19.2, left: 50, right: 50),
                     child: Text(
                       tagLine,
                       maxLines: 2,
@@ -108,7 +113,7 @@ class DetailPage extends StatelessWidget
                 padding: const EdgeInsets.only(top: 19.2, left: 50, right: 50, bottom: 19.2),
                 child: Text(
                   description,
-                  maxLines: 17,
+                  maxLines: 12,
                   overflow: TextOverflow.fade,
                   style: GoogleFonts.lato(
                       fontSize: 16,
@@ -170,9 +175,9 @@ class DetailPage extends StatelessWidget
               ),
 
               Padding(
-                padding: const EdgeInsets.only(top: 100, left: 50, right: 320, bottom: 19.2),
+                padding: const EdgeInsets.only(top: 100, left: 50, right: 30, bottom: 19.2),
                 child: Text(
-                  "Gostaria de Visitar? Encontre o caminho mais perto através do ícone acima. \nObtenha também o código QR que lhe dará descontos exclusivos.",
+                  "Gostaria de Visitar? \nEncontre o caminho mais perto através do ícone acima. \nObtenha também o código QR que lhe dará descontos exclusivos:",
                   style: GoogleFonts.lato(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

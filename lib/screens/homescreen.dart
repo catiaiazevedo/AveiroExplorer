@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: const EdgeInsets.only(left: 14.4, top: 28.8),
                     alignment: Alignment.centerLeft,
                     child: DefaultTabController(
-                      length: 4,
+                      length: 2,
                       child: TabBar(
                           labelPadding: const EdgeInsets.only(left: 14.4, right: 14.4),
                           indicatorPadding:
@@ -130,16 +130,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: const Color(0xFF000000), weight: 2.4, width: 14.4),
                           tabs: const [
                             Tab(
-                              child: Text('Recomendados'),
-                            ),
-                            Tab(
                               child: Text('Populares'),
                             ),
                             Tab(
                               child: Text('Novos Destinos'),
-                            ),
-                            Tab(
-                              child: Text('Favoritos'),
                             )
                           ]),
                     ),
