@@ -13,8 +13,10 @@ class SelectedPlaceScreen2 extends StatelessWidget {
   final String description;
   final String tagLine;
   final int price;
+  final double latitude;
+  final double longitude;
 
-  SelectedPlaceScreen2(this.image, this.name, this.description, this.tagLine, this.price);
+  SelectedPlaceScreen2(this.image, this.name, this.description, this.tagLine, this.price, this.latitude, this.longitude);
   
   @override
   Widget build(BuildContext context) {
@@ -167,7 +169,7 @@ class SelectedPlaceScreen2 extends StatelessWidget {
                         onTap: (){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DetailPage(name, description, tagLine))
+                            MaterialPageRoute(builder: (context) => DetailPage(name, description, tagLine, latitude, longitude))
                           );
                         },
                       )

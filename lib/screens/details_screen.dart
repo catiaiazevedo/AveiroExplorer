@@ -9,10 +9,12 @@ class DetailPage extends StatelessWidget
   final String name;
   final String description;
   final String tagLine;
+  final double latitude;
+  final double longitude;
 
   final FlutterTts flutterTts = FlutterTts();
 
-  DetailPage(this.name, this.description, this.tagLine);
+  DetailPage(this.name, this.description, this.tagLine, this.latitude, this.longitude);
 
   speak(String text) async {
     await flutterTts.setLanguage("pt-PT");
@@ -59,7 +61,7 @@ class DetailPage extends StatelessWidget
                       //Navigator.of(context).pop(); 40.639453663981236, -8.650906087045751
                       Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const MapPage(destinationLatitude: 40.639453663981236, destinationLongitude: -8.650906087045751)),
+                            MaterialPageRoute(builder: (context) => MapPage(destinationLatitude: latitude, destinationLongitude: longitude)),
                           );
                     },
                     child: Container(

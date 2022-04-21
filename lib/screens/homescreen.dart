@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aveiroexplorer/models/allacategories_model.dart';
 import 'package:aveiroexplorer/screens/selectedplacescreen.dart';
-import 'package:aveiroexplorer/widgets/bottom_navigation_bar.dart';
 import 'package:aveiroexplorer/widgets/custom_tab_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -24,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const BottomNavigationBarTravel(),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Categories').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
@@ -92,12 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          width: MediaQuery.of(context).size.width*0.5,
+                          width: MediaQuery.of(context).size.width*0.55,
                           child: FittedBox(
                             child: Text(
                               'Explore\nAveiro',
                               style: GoogleFonts.playfairDisplay(
-                                fontSize: 45.6,
+                                fontSize: 70,
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFF000000),
                               ),
@@ -158,7 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     document['name'][index], 
                                     document['description'][index].replaceAll("\\n", "\n\n"), 
                                     document['tagLine'][index], 
-                                    document['price'][index])));
+                                    document['price'][index],
+                                    document['latitude'][index],
+                                    document['longitude'][index])));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 28.8),
@@ -309,7 +309,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     document['name'][index], 
                                     document['description'][index].replaceAll("\\n", "\n\n"), 
                                     document['tagLine'][index], 
-                                    document['price'][index])));
+                                    document['price'][index],
+                                    document['latitude'][index],
+                                    document['longitude'][index])));
                           },
                           child: Container(
                             height: 124.8,
