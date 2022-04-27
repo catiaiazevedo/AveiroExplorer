@@ -8,6 +8,7 @@ import 'package:aveiroexplorer/screens/selectedplacescreen.dart';
 import 'package:aveiroexplorer/widgets/custom_tab_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   /// Page Controller
   final _pageController = PageController(viewportFraction: 0.877);
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,16 +60,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: SvgPicture.asset('assets/svg/icon_drawer.svg'),
                         ),
-                        Container(
-                          height: 57.6,
-                          width: 57.6,
-                          padding: const EdgeInsets.all(18),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9.6),
-                            color: const Color(0x080a0928),
+                        GestureDetector(
+                          onTap: () {
+                            showSearch(context: context, delegate: DataSearch(document));
+                          },
+                        child: Container(
+                            height: 57.6,
+                            width: 57.6,
+                            padding: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(9.6),
+                              color: const Color(0x080a0928),
+                            ),
+                            child: SvgPicture.asset('assets/svg/icon_search.svg'),
                           ),
-                          child: SvgPicture.asset('assets/svg/icon_search.svg'),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -374,4 +380,70 @@ class _HomeScreenState extends State<HomeScreen> {
         }),
     );
   }
+}
+
+class DataSearch extends SearchDelegate<String>{
+  final QueryDocumentSnapshot<Object?> document;
+
+  DataSearch(this.document);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = "";
+        }, 
+        icon: const Icon(Icons.clear)
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return 
+      IconButton(
+        onPressed: () {
+          close(context, "");
+        }, 
+        icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow,
+          progress: transitionAnimation,
+        )
+      );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+   return ListView();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = document['name'].where(
+      (p) => p.startsWith(query) ? true : false).toList();
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => ListTile(
+        leading: const Icon(Icons.location_city),
+        title: RichText(
+          text: TextSpan(
+            text:suggestionList[index].substring(0, query.length),
+            style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                text:suggestionList[index].substring(query.length, ),
+                style: const TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ]
+          ),
+        ),
+      ),
+      itemCount: suggestionList.length,
+    );
+  }
+  
 }

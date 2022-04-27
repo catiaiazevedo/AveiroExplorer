@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class DetailPage extends StatelessWidget 
 {
@@ -211,7 +212,10 @@ class DetailPage extends StatelessWidget
                 ),
                 ),
                 onTap: (){
-                  
+                  showDialog(
+                    context: context, 
+                    builder: (BuildContext context) => _buildPopupDialog(context)
+                  );
                 },
               ),
 
@@ -221,5 +225,33 @@ class DetailPage extends StatelessWidget
         ]
       ),
     );
+  }
+  Widget _buildPopupDialog(BuildContext context) {
+  return AlertDialog(
+    title: Text(
+      'QRCode para usar em $name!',
+      textAlign: TextAlign.center,
+    ),
+    content: Expanded(
+      child: SizedBox(
+        height: 250,
+        width: 500,
+        child: Center(
+          child: QrImage(
+            data: name,
+            padding: const EdgeInsets.all(0.0) 
+          ),
+        ),
+      ),
+    ),  
+    actions: <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Close'),
+      ),
+    ],
+   );
   }
 }
