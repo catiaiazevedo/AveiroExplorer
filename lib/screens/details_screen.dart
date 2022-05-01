@@ -232,18 +232,23 @@ class DetailPage extends StatelessWidget
       'QRCode para usar em $name!',
       textAlign: TextAlign.center,
     ),
-    content: Expanded(
-      child: SizedBox(
-        height: 250,
-        width: 500,
-        child: Center(
-          child: QrImage(
-            data: name,
-            padding: const EdgeInsets.all(0.0) 
-          ),
-        ),
-      ),
-    ),  
+    content: Flex(
+      direction: Axis.horizontal,
+      children: [ 
+        Expanded(
+            child: SizedBox(
+              height: 250,
+              width: 500,
+              child: Center(
+                child: QrImage(
+                  data: name,
+                  padding: const EdgeInsets.all(0.0) 
+                ),
+              ),
+            ),
+        ), 
+      ],
+    ),
     actions: <Widget>[
       TextButton(
         onPressed: () {

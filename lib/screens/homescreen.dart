@@ -8,7 +8,6 @@ import 'package:aveiroexplorer/screens/selectedplacescreen.dart';
 import 'package:aveiroexplorer/widgets/custom_tab_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:string_similarity/string_similarity.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -441,6 +440,17 @@ class DataSearch extends SearchDelegate<String>{
             ]
           ),
         ),
+        onTap: () {
+           Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SelectedPlaceScreen2(
+                  document['second_image'][index],
+                  document['name'][index], 
+                  document['description'][index].replaceAll("\\n", "\n\n"), 
+                  document['tagLine'][index], 
+                  document['price'][index],
+                  document['latitude'][index],
+                  document['longitude'][index])));
+        },
       ),
       itemCount: suggestionList.length,
     );
