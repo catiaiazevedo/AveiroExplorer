@@ -72,7 +72,6 @@ class _MapPageState extends State<MapPage> {
           _createPolylines();
         },
       ),
-      
     );
   }
   
@@ -80,56 +79,48 @@ class _MapPageState extends State<MapPage> {
     _locationData = await _currentLocation.getLocation();
     origin = PointLatLng(_locationData.latitude ?? 0.0, _locationData.longitude ?? 0.0);
 
+    _controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(_locationData.latitude ?? 0.0, _locationData.longitude ?? 0.0),
+      zoom: 18.0,
+    )));
+
     BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
           const ImageConfiguration(),
           "assets/images/person.png",
     );
-
-    /*setState(() {
-      _markers.add(Marker(
-          markerId: const MarkerId('Origin'),
-          position: LatLng(_locationData.latitude!, _locationData.longitude!),
-          infoWindow: const InfoWindow(title: 'Origin'),
-          icon: markerbitmap,
-        ));
-    });*/
-
-    polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints!.getRouteBetweenCoordinates(
-      googleAPiKey, // Google Maps API Key
-      origin!,
-      destination!,
-      travelMode: TravelMode.walking,
-    );
-    if (result.status == "OK") {
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+    if (polylineCoordinates.isEmpty || ( origin?.latitude != _locationData.latitude || origin?.longitude != _locationData.longitude)){
+      if (polylineCoordinates.isNotEmpty) polylineCoordinates.clear();
+      polylinePoints = PolylinePoints();
+      PolylineResult result = await polylinePoints!.getRouteBetweenCoordinates(
+        googleAPiKey, // Google Maps API Key
+        origin!,
+        destination!,
+        travelMode: TravelMode.walking,
+      );
+      if (result.status == "OK") {
+        for (var point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        }
       }
+
+      Marker marker = _markers.firstWhere((marker) => marker.markerId.value == "Destination");
+      setState(() {
+        _markers.remove(marker);
+        _markers.add(Marker(
+          markerId: const MarkerId('Destination'),
+          position: LatLng(polylineCoordinates[polylineCoordinates.length-1].latitude, polylineCoordinates[polylineCoordinates.length-1].longitude),
+          infoWindow: const InfoWindow(title: 'Destination'),
+        ));
+        _markers.add(Marker(
+          markerId: const MarkerId('Origin'),
+          position: LatLng(polylineCoordinates[0].latitude, polylineCoordinates[0].longitude),
+          infoWindow: const InfoWindow(title: 'Origin'),
+          icon: markerbitmap
+        ));
+      });
+
+      _addPolyLine();
     }
-
-    Marker marker = _markers.firstWhere((marker) => marker.markerId.value == "Destination");
-    setState(() {
-      _markers.remove(marker);
-      _markers.add(Marker(
-        markerId: const MarkerId('Destination'),
-        position: LatLng(polylineCoordinates[polylineCoordinates.length-1].latitude, polylineCoordinates[polylineCoordinates.length-1].longitude),
-        infoWindow: const InfoWindow(title: 'Destination'),
-      ));
-      _markers.add(Marker(
-        markerId: const MarkerId('Origin'),
-        position: LatLng(polylineCoordinates[0].latitude, polylineCoordinates[0].longitude),
-        infoWindow: const InfoWindow(title: 'Origin'),
-        icon: markerbitmap
-      ));
-    });
-
-    _addPolyLine();
-    _currentLocation.onLocationChanged.listen((LocationData loc) {
-      _controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
-        zoom: 18.0,
-      )));
-    });
   }
 
   _addPolyLine() {

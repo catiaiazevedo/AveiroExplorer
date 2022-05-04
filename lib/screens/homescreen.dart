@@ -383,7 +383,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class DataSearch extends SearchDelegate<String>{
   final QueryDocumentSnapshot<Object?> document;
-
   DataSearch(this.document);
 
   @override
@@ -414,46 +413,97 @@ class DataSearch extends SearchDelegate<String>{
 
   @override
   Widget buildResults(BuildContext context) {
-   return ListView();
+    bool res = document['name'].any((listElement) => listElement.contains(query) as bool);
+    if (res){
+      final index = document['name'].indexWhere((element) => element == query);
+      if (index >= 0){
+        return Center(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => SelectedPlaceScreen2(
+                    document['second_image'][index],
+                    document['name'][index], 
+                    document['description'][index].replaceAll("\\n", "\n\n"), 
+                    document['tagLine'][index], 
+                    document['price'][index],
+                    document['latitude'][index],
+                    document['longitude'][index])));
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 28.8),
+              width: 333.6,
+              height: 218.4,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(9.6),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: CachedNetworkImageProvider(
+                      document['front_image'][index]),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+      else{
+        return const Center(
+          child: Text(
+            "No Results Found.",
+          ),
+        );
+      }
+    }
+    else{
+      return const Center(
+        child: Text(
+          "No Results Found.",
+        ),
+      );
+    }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = document['name'].where(
-      (p) => p.startsWith(query) ? true : false).toList();
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => ListTile(
-        leading: const Icon(Icons.location_city),
-        title: RichText(
-          text: TextSpan(
-            text:suggestionList[index].substring(0, query.length),
-            style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold,
-            ),
-            children: [
-              TextSpan(
-                text:suggestionList[index].substring(query.length, ),
-                style: const TextStyle(
-                  color: Colors.grey,
-                ),
+    if (query.isNotEmpty){
+      final suggestionList = document['name'].where(
+        (p) => p.startsWith(query) ? true : false).toList();
+
+      if(suggestionList.length == 0){
+        return const Center(
+          child: Text(
+            "No Suggestions Found.",
+          ),
+        );
+      }
+      return ListView.builder(
+        itemBuilder: (BuildContext context, int index) => ListTile(
+          onTap: (){
+            query = suggestionList[index];
+          },
+          leading: const Icon(Icons.location_city),
+          title: RichText(
+            text: TextSpan(
+              text:suggestionList[index].substring(0, query.length),
+              style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold,
               ),
-            ]
+              children: [
+                TextSpan(
+                  text:suggestionList[index].substring(query.length, ),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ]
+            ),
           ),
         ),
-        onTap: () {
-           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SelectedPlaceScreen2(
-                  document['second_image'][index],
-                  document['name'][index], 
-                  document['description'][index].replaceAll("\\n", "\n\n"), 
-                  document['tagLine'][index], 
-                  document['price'][index],
-                  document['latitude'][index],
-                  document['longitude'][index])));
-        },
-      ),
-      itemCount: suggestionList.length,
-    );
+        itemCount: suggestionList.length,
+      );
+    }
+    return const Center(
+      child: Text("To appear suggestions, search term must have at least one letter."),
+    );  
   }
-  
 }
